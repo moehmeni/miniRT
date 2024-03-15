@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:23:44 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/15 15:17:41 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/15 16:13:37 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,14 @@ typedef struct s_plane
 	t_vec3	point;
 }			t_plane;
 
+typedef struct s_cylinder
+{
+	t_vec3	point;
+	t_vec3	normal;
+	t_vec3  start_cap;
+	double	height;
+	double	radius;
+}			t_cylinder;
 
 typedef struct s_canvas
 {

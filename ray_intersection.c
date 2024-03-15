@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/15 15:50:50 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/15 16:22:04 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,29 +109,20 @@ int	intersect_ray_plane(t_ray *ray, t_plane *plane, double *t)
 	return (0);
 }
 
-// int	main(void)
-// {
-// 	t_ray		ray;
-// 	t_sphere	sphere;
-// 	double		t;
-// 	t_plane		plane;
+t_vec3 intersect_ray_cylinder(t_ray *ray, t_cylinder *cyl)
+{
+	t_quadratic	q;
+	t_vec3		oc;
 
-// 	plane.normal = (t_vec3){0, 0, 1};
-// 	plane.point = (t_vec3){0, 0, 0};
-// 	if (intersect_ray_plane(&ray, &plane, &t))
-// 		printf("Intersected at t = %f\n", t);
-// 	else
-// 		printf("No intersection\n");
-// 	ray.origin = (t_vec3){0, 0, 0};
-// 	ray.direction = (t_vec3){0, 0, 1};
-// 	sphere.center = (t_vec3){0, 0, 0};
-// 	sphere.radius = 1;
-// 	if (intersect_ray_sphere(&ray, &sphere, &t))
-// 		printf("Intersected at t = %f\n", t);
-// 	else
-// 		printf("No intersection\n");
-// 	return (0);
-// }
-
-
-
+	oc = vec3_sub(ray->origin, cyl->start_cap);
+	q.a = vec3_dot(ray->direction, ray->direction) - vec3_dot(ray->direction, cyl->normal) * vec3_dot(ray->direction, cyl->normal);
+	q.b = 2 * (vec3_dot(ray->direction, oc) - vec3_dot(ray->direction, cyl->normal) * vec3_dot(oc, cyl->normal));
+	q.c = vec3_dot(oc, oc) - vec3_dot(oc, cyl->normal) * vec3_dot(oc, cyl->normal) - cyl->radius * cyl->radius;
+	q = solve_quadratic(q.a, q.b, q.c);
+	if (q.hit && (q.t1 < 0 || q.t2 < 0))
+		q.hit = false;
+	else if (q.t1 < 0)
+		q.t1 = q.t2;
+	else if (q.t2 < 0)
+		q.t2 = q.t1;
+}
