@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_intersection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/15 16:22:04 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/16 15:15:37 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,9 @@
 //     return t1, t2
 // }
 
-
 // A function capable of converting x, y coordinates from the canvas to the viewport.
 
-t_vec3 canvas2viewoprt(t_canvas *canvas, t_vec3 *viewport, int x, int y)
+t_vec3	canvas2viewoprt(t_canvas *canvas, t_vec3 *viewport, int x, int y)
 {
 	t_vec3	point;
 
@@ -52,18 +51,18 @@ typedef struct s_quadratic
 	double	sq_delta;
 	float	t1;
 	float	t2;
-	bool	hit;
-}	t_quadratic;
+	int		hit;
+}			t_quadratic;
 
-t_quadratic solve_quadratic(double a, double b, double c)
+t_quadratic	solve_quadratic(double a, double b, double c)
 {
 	t_quadratic	q;
 
-	q.hit = true;
+	q.hit = 1;
 	q.delta = b * b - 4 * a * c;
 	if (q.delta < 0)
 	{
-		q.hit = false;
+		q.hit = 0;
 		return (q);
 	}
 	q.sq_delta = sqrt(q.delta);
@@ -77,14 +76,14 @@ t_quadratic	intersect_ray_sphere(t_ray *ray, t_sphere *sphere)
 	t_vec3		oc;
 	t_quadratic	q;
 
-	q.hit = true;
+	q.hit = 1;
 	oc = vec3_sub(ray->origin, sphere->center);
 	q.a = vec3_dot(ray->direction, ray->direction);
 	q.b = 2.0 * vec3_dot(oc, ray->direction);
 	q.c = vec3_dot(oc, oc) - (sphere->radius * sphere->radius);
 	q = solve_quadratic(q.a, q.b, q.c);
 	if (q.hit && (q.t1 < 0 || q.t2 < 0))
-		q.hit = false;
+		q.hit = 0;
 	else if (q.t1 < 0)
 		q.t1 = q.t2;
 	else if (q.t2 < 0)
@@ -109,18 +108,21 @@ int	intersect_ray_plane(t_ray *ray, t_plane *plane, double *t)
 	return (0);
 }
 
-t_vec3 intersect_ray_cylinder(t_ray *ray, t_cylinder *cyl)
+t_vec3	intersect_ray_cylinder(t_ray *ray, t_cylinder *cyl)
 {
 	t_quadratic	q;
 	t_vec3		oc;
 
 	oc = vec3_sub(ray->origin, cyl->start_cap);
-	q.a = vec3_dot(ray->direction, ray->direction) - vec3_dot(ray->direction, cyl->normal) * vec3_dot(ray->direction, cyl->normal);
-	q.b = 2 * (vec3_dot(ray->direction, oc) - vec3_dot(ray->direction, cyl->normal) * vec3_dot(oc, cyl->normal));
-	q.c = vec3_dot(oc, oc) - vec3_dot(oc, cyl->normal) * vec3_dot(oc, cyl->normal) - cyl->radius * cyl->radius;
+	q.a = vec3_dot(ray->direction, ray->direction) - vec3_dot(ray->direction,
+			cyl->normal) * vec3_dot(ray->direction, cyl->normal);
+	q.b = 2 * (vec3_dot(ray->direction, oc) - vec3_dot(ray->direction,
+				cyl->normal) * vec3_dot(oc, cyl->normal));
+	q.c = vec3_dot(oc, oc) - vec3_dot(oc, cyl->normal) * vec3_dot(oc,
+			cyl->normal) - cyl->radius * cyl->radius;
 	q = solve_quadratic(q.a, q.b, q.c);
 	if (q.hit && (q.t1 < 0 || q.t2 < 0))
-		q.hit = false;
+		q.hit = 0;
 	else if (q.t1 < 0)
 		q.t1 = q.t2;
 	else if (q.t2 < 0)
