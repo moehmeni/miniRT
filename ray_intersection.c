@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/15 16:22:04 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/16 15:12:32 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@
 //     return t1, t2
 // }
 
-
-// A function capable of converting x, y coordinates from the canvas to the viewport.
-
-t_vec3 canvas2viewoprt(t_canvas *canvas, t_vec3 *viewport, int x, int y)
+t_vec3	canvas2viewoprt(t_canvas *canvas, t_vec3 *viewport, int x, int y)
 {
 	t_vec3	point;
 
@@ -42,18 +39,6 @@ t_vec3 canvas2viewoprt(t_canvas *canvas, t_vec3 *viewport, int x, int y)
 	point.z = viewport->z;
 	return (point);
 }
-
-typedef struct s_quadratic
-{
-	double	a;
-	double	b;
-	double	c;
-	double	delta;
-	double	sq_delta;
-	float	t1;
-	float	t2;
-	bool	hit;
-}	t_quadratic;
 
 t_quadratic solve_quadratic(double a, double b, double c)
 {
@@ -72,7 +57,7 @@ t_quadratic solve_quadratic(double a, double b, double c)
 	return (q);
 }
 
-t_quadratic	intersect_ray_sphere(t_ray *ray, t_sphere *sphere)
+int	intersect_ray_sphere(t_ray *ray, t_sphere *sphere, double *t)
 {
 	t_vec3		oc;
 	t_quadratic	q;
@@ -84,14 +69,12 @@ t_quadratic	intersect_ray_sphere(t_ray *ray, t_sphere *sphere)
 	q.c = vec3_dot(oc, oc) - (sphere->radius * sphere->radius);
 	q = solve_quadratic(q.a, q.b, q.c);
 	if (q.hit && (q.t1 < 0 || q.t2 < 0))
-		q.hit = false;
-	else if (q.t1 < 0)
-		q.t1 = q.t2;
-	else if (q.t2 < 0)
-		q.t2 = q.t1;
-	// t_vec3 p1 = ray_at(ray, q.t1);
-	// t_vec3 norm_p1 = vec3_sub(p1, sphere->center);
-	return (q);
+		return (0);
+	else if (q.hit && q.t1 < q.t2)
+		*t = q.t1;
+	else if (q.hit && q.t2 < q.t1)
+		*t = q.t2;
+	return (1);
 }
 
 int	intersect_ray_plane(t_ray *ray, t_plane *plane, double *t)
@@ -104,12 +87,12 @@ int	intersect_ray_plane(t_ray *ray, t_plane *plane, double *t)
 	{
 		numer = vec3_dot(vec3_sub(plane->point, ray->origin), plane->normal);
 		*t = numer / denom;
-		return (*t >= 0);
+		return (1);
 	}
 	return (0);
 }
 
-t_vec3 intersect_ray_cylinder(t_ray *ray, t_cylinder *cyl)
+int	intersect_ray_cylinder(t_ray *ray, t_cylinder *cyl, double *t)
 {
 	t_quadratic	q;
 	t_vec3		oc;
@@ -120,9 +103,71 @@ t_vec3 intersect_ray_cylinder(t_ray *ray, t_cylinder *cyl)
 	q.c = vec3_dot(oc, oc) - vec3_dot(oc, cyl->normal) * vec3_dot(oc, cyl->normal) - cyl->radius * cyl->radius;
 	q = solve_quadratic(q.a, q.b, q.c);
 	if (q.hit && (q.t1 < 0 || q.t2 < 0))
-		q.hit = false;
-	else if (q.t1 < 0)
-		q.t1 = q.t2;
-	else if (q.t2 < 0)
-		q.t2 = q.t1;
+		return (0);
+	else if (q.hit && q.t1 < q.t2)
+		*t = q.t1;
+	else if (q.hit && q.t2 < q.t1)
+		*t = q.t2;
+	return (1);
+}
+
+t_object	*intersect_ray(t_scene *scene, t_ray *ray, double *t)
+{
+	t_object	*nearest;
+	t_object	*current;
+	double		tmp_t;
+
+	nearest = NULL;
+	current = scene->objects;
+	tmp_t = INFINITY;
+	while (current)
+	{
+		if (current->type == SPHERE)
+		{
+			if (intersect_ray_sphere(ray, current->sphere, &tmp_t))
+			{
+				*t = tmp_t;
+				nearest = current;
+			}
+		}
+		else if (current->type == PLANE)
+		{
+			if (intersect_ray_plane(ray, current->plane, &tmp_t))
+			{
+				*t = tmp_t;
+				nearest = current;
+			}
+		}
+		else if (current->type == CYLINDER)
+		{
+			if (intersect_ray_cylinder(ray, current->cylinder, &tmp_t))
+			{
+				*t = tmp_t;
+				nearest = current;
+			}
+		}
+		current = current->next;
+	}
+	*t = tmp_t;
+	return (nearest);
+}
+
+// check if hit then find color at surface of the object.
+
+t_color	color_at(t_scene *scene, t_ray *ray)
+{
+	t_object	*hit;
+	double		t;
+
+	hit = intersect_ray(scene, ray, &t);
+	if (hit)
+	{
+		if (hit->type == SPHERE)
+			return (hit->sphere->color);
+		else if (hit->type == PLANE)
+			return (hit->plane->color);
+		else if (hit->type == CYLINDER)
+			return (hit->cylinder->color);
+	}
+	return ((t_color){0, 0, 0});
 }
