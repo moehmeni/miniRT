@@ -6,7 +6,7 @@
 #    By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/18 17:01:34 by mmomeni           #+#    #+#              #
-#    Updated: 2024/03/04 19:23:50 by mmomeni          ###   ########.fr        #
+#    Updated: 2024/03/17 16:38:08 by mmomeni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME=		miniRT
 CFLAGS=		-Wall -Wextra -Werror
 GLFWFLAGS=	-framework Cocoa -framework OpenGL -framework IOKit
 MLXFLAGS=	-L ~/.brew/cellar/glfw/3.3.8/lib -lglfw -L ./MLX42/build -lmlx42
-FUNCS=		render.c utils.c parse.c transform.c line.c
+FUNCS=		vector.c intersect.c
 SRCS=		main.c $(FUNCS)
 LIBFT_DIR=	libft
 LIBFT=		$(LIBFT_DIR)/libft.a
@@ -50,6 +50,6 @@ debug: CFLAGS += -fsanitize=address -g
 debug: all bonus
 
 norm:
-	norminette *.c bonus libft
+	norminette $(SRCS)
 
 .PHONY: all clean fclean re bonus brew mlx
