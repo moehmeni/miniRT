@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/17 16:15:05 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/18 16:09:52 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_vec3	canvas2viewoprt(t_canvas *canvas, t_vec3 *viewport, int x, int y)
 	return (point);
 }
 
-t_quadratic	solve_quadratic(double a, double b, double c)
+t_quadratic	solve_quadratic(float a, float b, float c)
 {
 	t_quadratic	q;
 
@@ -45,7 +45,7 @@ int	intersect_ray_sphere(t_ray *ray, t_sphere *sphere)
 	t_quadratic	q;
 
 	q.hit = 1;
-	oc = vec3_op(SUB, ray->origin, sphere->center);
+	oc = vec3_op(SUB, ray->origin, sphere->position);
 	q.a = vec3_dot(ray->direction, ray->direction);
 	q.b = 2.0 * vec3_dot(oc, ray->direction);
 	q.c = vec3_dot(oc, oc) - (sphere->radius * sphere->radius);
@@ -63,13 +63,13 @@ int	intersect_ray_sphere(t_ray *ray, t_sphere *sphere)
 
 int	intersect_ray_plane(t_ray *ray, t_plane *plane)
 {
-	double	denom;
-	double	numer;
+	float	denom;
+	float	numer;
 
 	denom = vec3_dot(plane->normal, ray->direction);
 	if (fabs(denom) > 0)
 	{
-		numer = vec3_dot(vec3_op(SUB, plane->point, ray->origin),
+		numer = vec3_dot(vec3_op(SUB, plane->position, ray->origin),
 							plane->normal);
 		ray->t = numer / denom;
 		return (ray->t >= 0);
@@ -82,7 +82,7 @@ int	intersect_ray_cylinder(t_ray *ray, t_cylinder *cyl)
 	t_quadratic	q;
 	t_vec3		oc;
 
-	oc = vec3_op(SUB, ray->origin, cyl->start_cap);
+	oc = vec3_op(SUB, ray->origin, cyl->position);
 	q.a = vec3_dot(ray->direction, ray->direction) - vec3_dot(ray->direction,
 			cyl->normal) * vec3_dot(ray->direction, cyl->normal);
 	q.b = 2 * (vec3_dot(ray->direction, oc) - vec3_dot(ray->direction,
@@ -129,7 +129,7 @@ t_object	*intersect_ray_object(t_scene *scene, t_ray *ray)
 t_color	color_at(t_scene *scene, t_ray *ray)
 {
 	t_object	*hit;
-	double		t;
+	float		t;
 
 	hit = intersect_ray_object(scene, ray);
 	if (hit)

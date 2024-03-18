@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:23:44 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/17 16:34:27 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/18 16:09:41 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ enum e_object_type
 
 typedef struct s_quadratic
 {
-	double a;
-	double b;
-	double c;
-	double delta;
-	double sq_delta;
+	float a;
+	float b;
+	float c;
+	float delta;
+	float sq_delta;
 	float t1;
 	float t2;
 	int hit;
@@ -51,9 +51,9 @@ typedef struct s_quadratic
 
 typedef struct s_vec3
 {
-	double x;
-	double y;
-	double z;
+	float x;
+	float y;
+	float z;
 } t_vec3;
 
 typedef struct s_color
@@ -74,19 +74,19 @@ typedef struct s_canvas
 typedef struct s_camera
 {
 	t_vec3 position;
-	double fov;
+	float fov;
 } t_camera;
 
 typedef struct s_amblight
 {
-	double ratio;
+	float ratio;
 	t_color color;
 } t_amblight;
 
 typedef struct s_light
 {
 	t_vec3 position;
-	double ratio;
+	float ratio;
 	t_color color;
 } t_light;
 
@@ -107,24 +107,23 @@ typedef struct s_scene
 
 typedef struct s_sphere
 {
-	t_vec3 center;
-	double radius;
+	t_vec3 position;
+	float radius;
 	t_color color;
 } t_sphere;
 
 typedef struct s_plane
 {
+	t_vec3 position;
 	t_vec3 normal;
-	t_vec3 point;
 	t_color color;
 } t_plane;
 
 typedef struct s_cylinder
 {
-	t_vec3 point;
+	t_vec3 position;
 	t_vec3 normal;
-	t_vec3 start_cap;
-	double radius;
+	float radius;
 	t_color color;
 } t_cylinder;
 
@@ -134,7 +133,6 @@ typedef struct s_object
 	t_plane *plane;
 	t_cylinder *cylinder;
 	enum e_object_type type;
-	struct s_object *next;
 } t_object;
 
 /* ----------------------------*/ /*functions*/
