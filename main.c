@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 19:25:50 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/17 20:45:37 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/18 15:35:09 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,31 +19,6 @@ void	key_hook(mlx_key_data_t data, void *param)
 	mlx = (mlx_t *)param;
 	if (data.key == MLX_KEY_ESCAPE)
 		mlx_close_window(mlx);
-}
-
-int	*parse_vec3(char *str)
-{
-	int	vec[3];
-	int	*vec_heap;
-
-	vec_heap = ft_split(str, ",");
-	vec[0] = vec_heap[0];
-	vec[1] = vec_heap[1];
-	vec[2] = vec_heap[2];
-	ft_free_split(vec_heap);
-	return (vec);
-}
-
-void	parse_line(char *line, t_scene *scene)
-{
-	char	**spl;
-
-	spl = ft_split(line, ' ');
-	if (ft_strcmp(spl[0], "A"))
-	{
-		
-	}
-	ft_free_split(spl);
 }
 
 int	main(int argc, char **argv)
