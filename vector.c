@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:21:15 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/17 12:34:20 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/18 19:47:02 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_vec3	vec3_op(enum e_vec3_op op, t_vec3 a, t_vec3 b)
 		return ((t_vec3){a.y * b.z - a.z * b.y,
 			a.z * b.x - a.x * b.z,
 			a.x * b.y - a.y * b.x});
+	return ((t_vec3){0, 0, 0});
 }
 
 t_vec3	vec3_norm(t_vec3 a)
