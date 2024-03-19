@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 19:25:50 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/18 19:46:37 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/19 15:13:00 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	main(int argc, char **argv)
 	mlx_t		*mlx;
 	t_object	objs[10];
 	t_scene		scene;
+	size_t		i;
 	char *line;
 
 	if (argc != 2)
@@ -42,20 +43,16 @@ int	main(int argc, char **argv)
 		terminate("Error\nInvalid file\n");
 	mlx = mlx_init(512, 512, "MiniRT", 1);
 	scene = (t_scene){.objects = objs};
+	i = 0;
 	while (1)
 	{
 		line = get_next_line(fd);
 		if (!line)
 			break;
-		parse_line(line, &scene);
+		parse_line(line, &scene, i++);
 		free(line);
 	}
-	// testing if the scene is parsed correctly
-	printf("obj count: %zu\n", scene.obj_count);
-	for (size_t i = 0; i < scene.obj_count; i++)
-	{
-		printf("obj type: %d\n", scene.objects[i].type);
-	}
+	scene.obj_count = i;
 	return (0);
 	// mlx_key_hook(mlx, key_hook, mlx);
 	// mlx_loop(mlx);

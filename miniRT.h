@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:23:44 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/18 19:56:48 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/19 15:08:41 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,6 @@ float					vec3_dist(t_vec3 a, t_vec3 b);
 
 size_t					intersect_ray_object(t_scene *scene, t_ray *ray);
 
-void					parse_line(char *line, t_scene *scene);
+void					parse_line(char *line, t_scene *scene, size_t i);
 
 #endif
