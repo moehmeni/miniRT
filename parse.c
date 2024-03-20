@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 15:34:57 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/19 15:09:11 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/19 19:12:04 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ void	parse_line(char *line, t_scene *scene, size_t i)
 		// TODO:
 	}
 	else if (!ft_strcmp(s[0], "pl"))
-		scene->objects[i]= obj = parse_plane(s);
+		scene->objects[i] = parse_plane(s);
 	else if (!ft_strcmp(s[0], "sp"))
-		scene->objects[i]= obj = parse_sphere(s);
+		scene->objects[i] = parse_sphere(s);
 	else if (!ft_strcmp(s[0], "cy"))
 		scene->objects[i]= parse_cylinder(s);
 	else
