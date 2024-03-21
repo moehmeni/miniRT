@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:21:15 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/18 19:47:02 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/21 20:05:36 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ t_vec3	vec3_op(enum e_vec3_op op, t_vec3 a, t_vec3 b)
 		return ((t_vec3){a.x * b.x, a.y * b.y, a.z * b.z});
 	else if (op == CROSS)
 		return ((t_vec3){a.y * b.z - a.z * b.y,
-			a.z * b.x - a.x * b.z,
-			a.x * b.y - a.y * b.x});
+							a.z * b.x - a.x * b.z,
+							a.x * b.y - a.y * b.x});
 	return ((t_vec3){0, 0, 0});
 }
 
@@ -39,7 +39,7 @@ float	vec3_dot(t_vec3 a, t_vec3 b)
 
 float	vec3_len(t_vec3 a)
 {
-	return (sqrt(vec3_dist(a, a)));
+	return (sqrt(vec3_dist(a, (t_vec3){0, 0, 0})));
 }
 
 float	vec3_dist(t_vec3 a, t_vec3 b)
@@ -53,4 +53,3 @@ float	vec3_dist(t_vec3 a, t_vec3 b)
 	z = a.z - b.z;
 	return (sqrt(x * x + y * y + z * z));
 }
-

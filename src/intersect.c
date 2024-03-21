@@ -6,21 +6,21 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/18 19:48:55 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/21 20:19:29 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_vec3	canvas2viewoprt(t_canvas *canvas, t_vec3 *viewport, int x, int y)
-{
-	t_vec3	point;
+// t_vec3	canvas2viewoprt(t_canvas *canvas, t_vec3 *viewport, int x, int y)
+// {
+// 	t_vec3	point;
 
-	point.x = x * viewport->x / canvas->width;
-	point.y = y * viewport->y / canvas->height;
-	point.z = viewport->z;
-	return (point);
-}
+// 	point.x = x * viewport->x / canvas->width;
+// 	point.y = y * viewport->y / canvas->height;
+// 	point.z = viewport->z;
+// 	return (point);
+// }
 
 t_quadratic	solve_quadratic(float a, float b, float c)
 {
@@ -39,15 +39,15 @@ t_quadratic	solve_quadratic(float a, float b, float c)
 	return (q);
 }
 
-int	intersect_ray_sphere(t_ray *ray, t_sphere sphere)
+static int	ray_hit_sphere(t_ray *ray, t_sphere sphere)
 {
 	t_vec3		oc;
 	t_quadratic	q;
 
 	q.hit = 1;
-	oc = vec3_op(SUB, ray->origin, sphere.position);
-	q.a = vec3_dot(ray->direction, ray->direction);
-	q.b = 2.0 * vec3_dot(oc, ray->direction);
+	oc = vec3_op(SUB, ray->o, sphere.pos);
+	q.a = vec3_dot(ray->dir, ray->dir);
+	q.b = 2.0 * vec3_dot(oc, ray->dir);
 	q.c = vec3_dot(oc, oc) - (sphere.radius * sphere.radius);
 	q = solve_quadratic(q.a, q.b, q.c);
 	if (q.hit && (q.t1 < 0 || q.t2 < 0))
@@ -61,15 +61,15 @@ int	intersect_ray_sphere(t_ray *ray, t_sphere sphere)
 	return (1);
 }
 
-int	intersect_ray_plane(t_ray *ray, t_plane plane)
+static int	ray_hit_plane(t_ray *ray, t_plane plane)
 {
 	float	denom;
 	float	numer;
 
-	denom = vec3_dot(plane.normal, ray->direction);
+	denom = vec3_dot(plane.normal, ray->dir);
 	if (fabs(denom) > 0)
 	{
-		numer = vec3_dot(vec3_op(SUB, plane.position, ray->origin),
+		numer = vec3_dot(vec3_op(SUB, plane.pos, ray->o),
 							plane.normal);
 		ray->t = numer / denom;
 		return (ray->t >= 0);
@@ -77,16 +77,16 @@ int	intersect_ray_plane(t_ray *ray, t_plane plane)
 	return (0);
 }
 
-int	intersect_ray_cylinder(t_ray *ray, t_cylinder cyl)
+static int	ray_hit_cyl(t_ray *ray, t_cylinder cyl)
 {
 	t_quadratic	q;
 	t_vec3		oc;
 
-	oc = vec3_op(SUB, ray->origin, cyl.position);
-	q.a = vec3_dot(ray->direction, ray->direction) - vec3_dot(ray->direction,
-			cyl.normal) * vec3_dot(ray->direction, cyl.normal);
-	q.b = 2 * (vec3_dot(ray->direction, oc) - vec3_dot(ray->direction,
-				cyl.normal) * vec3_dot(oc, cyl.normal));
+	oc = vec3_op(SUB, ray->o, cyl.pos);
+	q.a = vec3_dot(ray->dir, ray->dir) - vec3_dot(ray->dir, cyl.normal)
+		* vec3_dot(ray->dir, cyl.normal);
+	q.b = 2 * (vec3_dot(ray->dir, oc) - vec3_dot(ray->dir, cyl.normal)
+			* vec3_dot(oc, cyl.normal));
 	q.c = vec3_dot(oc, oc) - vec3_dot(oc, cyl.normal) * vec3_dot(oc, cyl.normal)
 		- cyl.radius * cyl.radius;
 	q = solve_quadratic(q.a, q.b, q.c);
@@ -101,48 +101,35 @@ int	intersect_ray_cylinder(t_ray *ray, t_cylinder cyl)
 	return (1);
 }
 
-size_t	intersect_ray_object(t_scene *scene, t_ray *ray)
+t_object	*ray_get_hit(t_scene *scene, t_ray *ray)
 {
 	float	t_min;
 	size_t	i;
-	size_t	nearest;
+	int		j;
 
-	nearest = -1;
 	t_min = INFINITY;
 	i = 0;
-	while (&scene->objects[i])
+	j = -1;
+	while (i < scene->obj_count)
 	{
 		if (scene->objects[i].type == SPHERE)
-			intersect_ray_sphere(ray, scene->objects[i].sphere);
+			ray_hit_sphere(ray, scene->objects[i].sphere);
 		else if (scene->objects[i].type == PLANE)
-			intersect_ray_plane(ray, scene->objects[i].plane);
+			ray_hit_plane(ray, scene->objects[i].plane);
 		else if (scene->objects[i].type == CYLINDER)
-			intersect_ray_cylinder(ray, scene->objects[i].cylinder);
+			ray_hit_cyl(ray, scene->objects[i].cylinder);
 		if (ray->t < t_min)
 		{
 			t_min = ray->t;
-			nearest = i;
+			j = i;
 		}
+		i++;
 	}
 	ray->t = t_min;
-	return (nearest);
-}
-
-t_color	color_at(t_scene *scene, t_ray *ray)
-{
-	size_t	hit;
-	t_color	color;
-
-	color = (t_color){0, 0, 0};
-	hit = intersect_ray_object(scene, ray);
-	if (hit)
-	{
-		if (scene->objects[hit].type == SPHERE)
-			color = scene->objects[hit].sphere.color;
-		else if (scene->objects[hit].type == PLANE)
-			color = scene->objects[hit].plane.color;
-		else if (scene->objects[hit].type == CYLINDER)
-			color = scene->objects[hit].cylinder.color;
-	}
-	return (color);
+	// printf("t: %f\n", ray->t);
+	// print type of object
+	// printf("type: %d\n", scene->objects[j].type);
+	if (j == -1)
+		return (NULL);
+	return (&scene->objects[j]);
 }
