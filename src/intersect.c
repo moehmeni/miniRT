@@ -3,24 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   intersect.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/21 20:19:29 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/23 14:21:19 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-// t_vec3	canvas2viewoprt(t_canvas *canvas, t_vec3 *viewport, int x, int y)
-// {
-// 	t_vec3	point;
-
-// 	point.x = x * viewport->x / canvas->width;
-// 	point.y = y * viewport->y / canvas->height;
-// 	point.z = viewport->z;
-// 	return (point);
-// }
 
 t_quadratic	solve_quadratic(float a, float b, float c)
 {
@@ -126,10 +117,30 @@ t_object	*ray_get_hit(t_scene *scene, t_ray *ray)
 		i++;
 	}
 	ray->t = t_min;
-	// printf("t: %f\n", ray->t);
-	// print type of object
-	// printf("type: %d\n", scene->objects[j].type);
+
 	if (j == -1)
 		return (NULL);
 	return (&scene->objects[j]);
 }
+
+
+t_vec3	canvas2viewoprt(t_canvas *canvas, t_vec3 *viewport, int x, int y)
+{
+	t_vec3	point;
+
+	point.x = x * viewport->x / canvas->width;
+	point.y = y * viewport->y / canvas->height;
+	point.z = viewport->z;
+	return (point);
+}
+
+t_vec3	viewport_dim(t_canvas *canvas, t_camera *camera)
+{
+	t_vec3	dimension;
+
+	dimension.x = 2 * tan(camera->fov / 2);
+	dimension.y = dimension.x * canvas->height / canvas->width;
+	dimension.z = 1;
+	return (dimension);
+}
+
