@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/23 14:21:19 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/24 20:36:03 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,30 +117,27 @@ t_object	*ray_get_hit(t_scene *scene, t_ray *ray)
 		i++;
 	}
 	ray->t = t_min;
-
 	if (j == -1)
 		return (NULL);
 	return (&scene->objects[j]);
 }
 
-
-t_vec3	canvas2viewoprt(t_canvas *canvas, t_vec3 *viewport, int x, int y)
+t_vec3	viewport_px_pos(t_canvas canvas, t_viewport v, int x, int y)
 {
 	t_vec3	point;
 
-	point.x = x * viewport->x / canvas->width;
-	point.y = y * viewport->y / canvas->height;
-	point.z = viewport->z;
+	point.x = x * v.w / canvas.w;
+	point.y = y * v.h / canvas.h;
+	point.z = 1;
 	return (point);
 }
 
-t_vec3	viewport_dim(t_canvas *canvas, t_camera *camera)
+t_viewport	viewport_dim(t_canvas canvas, t_camera camera)
 {
-	t_vec3	dimension;
+	t_viewport	v;
 
-	dimension.x = 2 * tan(camera->fov / 2);
-	dimension.y = dimension.x * canvas->height / canvas->width;
-	dimension.z = 1;
-	return (dimension);
+	v.w = 2 * tan(camera.fov / 2);
+	v.h = v.w * (canvas.h / canvas.w);
+	return (v);
 }
 

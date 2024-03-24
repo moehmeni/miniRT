@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:23:44 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/21 20:15:02 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/24 20:34:21 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,12 @@ typedef struct s_viewport
 	size_t				h;
 }						t_viewport;
 
+typedef struct s_canvas
+{
+	size_t				w;
+	size_t				h;
+}						t_canvas;
+
 typedef struct s_camera
 {
 	t_vec3				pos;
@@ -136,6 +142,7 @@ typedef struct s_scene
 	t_camera			camera;
 	t_amblight			amblight;
 	t_viewport			viewport;
+	t_canvas			canvas;
 	t_light				*lights;
 	t_object			*objects;
 	size_t				obj_count;
@@ -162,5 +169,9 @@ void					parse_line(char *line, t_scene *scene);
 
 t_object				*ray_get_hit(t_scene *scene, t_ray *ray);
 int						ray_get_color(t_scene *scene, t_ray *ray);
+
+
+t_viewport	viewport_dim(t_canvas canvas, t_camera camera);
+t_vec3	viewport_px_pos(t_canvas canvas, t_viewport v, int x, int y);
 
 #endif
