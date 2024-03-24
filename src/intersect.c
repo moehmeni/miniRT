@@ -3,30 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   intersect.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/24 20:36:03 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/24 22:23:01 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-
 t_quadratic	solve_quadratic(float a, float b, float c)
 {
 	t_quadratic	q;
 
-	q.hit = 1;
 	q.delta = b * b - 4 * a * c;
 	if (q.delta < 0)
-	{
-		q.hit = 0;
 		return (q);
-	}
-	q.sq_delta = sqrt(q.delta);
-	q.t1 = (-b + q.sq_delta) / (2 * a);
-	q.t2 = (-b - q.sq_delta) / (2 * a);
+	q.t1 = (-b + sqrt(q.delta)) / (2 * a);
+	q.t2 = (-b - sqrt(q.delta)) / (2 * a);
 	return (q);
 }
 
@@ -35,20 +29,23 @@ static int	ray_hit_sphere(t_ray *ray, t_sphere sphere)
 	t_vec3		oc;
 	t_quadratic	q;
 
-	q.hit = 1;
 	oc = vec3_op(SUB, ray->o, sphere.pos);
 	q.a = vec3_dot(ray->dir, ray->dir);
 	q.b = 2.0 * vec3_dot(oc, ray->dir);
 	q.c = vec3_dot(oc, oc) - (sphere.radius * sphere.radius);
 	q = solve_quadratic(q.a, q.b, q.c);
-	if (q.hit && (q.t1 < 0 || q.t2 < 0))
+	if (q.delta < 0 || (q.t1 < 0 && q.t2 < 0))
+	{
+		printf("no hit\n");
 		return (0);
+	}
 	else if (q.t1 < 0)
 		ray->t = q.t2;
 	else if (q.t2 < 0)
 		ray->t = q.t1;
 	else
 		ray->t = fmin(q.t1, q.t2);
+	// printf("t: %f\n", ray->t);
 	return (1);
 }
 
@@ -81,7 +78,7 @@ static int	ray_hit_cyl(t_ray *ray, t_cylinder cyl)
 	q.c = vec3_dot(oc, oc) - vec3_dot(oc, cyl.normal) * vec3_dot(oc, cyl.normal)
 		- cyl.radius * cyl.radius;
 	q = solve_quadratic(q.a, q.b, q.c);
-	if (q.hit && (q.t1 < 0 || q.t2 < 0))
+	if (q.delta < 0 || (q.t1 < 0 && q.t2 < 0))
 		return (0);
 	else if (q.t1 < 0)
 		ray->t = q.t2;
@@ -121,23 +118,3 @@ t_object	*ray_get_hit(t_scene *scene, t_ray *ray)
 		return (NULL);
 	return (&scene->objects[j]);
 }
-
-t_vec3	viewport_px_pos(t_canvas canvas, t_viewport v, int x, int y)
-{
-	t_vec3	point;
-
-	point.x = x * v.w / canvas.w;
-	point.y = y * v.h / canvas.h;
-	point.z = 1;
-	return (point);
-}
-
-t_viewport	viewport_dim(t_canvas canvas, t_camera camera)
-{
-	t_viewport	v;
-
-	v.w = 2 * tan(camera.fov / 2);
-	v.h = v.w * (canvas.h / canvas.w);
-	return (v);
-}
-

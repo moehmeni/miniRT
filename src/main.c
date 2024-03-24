@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 19:25:50 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/24 20:36:46 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/24 22:17:24 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ void	render(mlx_t *mlx, t_scene scene)
 		{
 			ray = (t_ray){scene.camera.pos, viewport_px_pos(scene.canvas, scene.viewport, i, j), INFINITY};
 			ray.dir = vec3_norm(vec3_op(SUB, ray.dir, scene.camera.pos));
+			// printf("(%f, %f, %f)\n", ray.dir.x, ray.dir.y, ray.dir.z);
 			mlx_put_pixel(img, i, j, ray_get_color(&scene, &ray));
 			j++;
 		}
 		i++;
 	}
-	printf("Rendering done\n");
 	mlx_image_to_window(mlx, img, 0, 0);
 }
 

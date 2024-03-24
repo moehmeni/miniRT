@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:21:15 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/21 20:05:36 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/24 21:03:09 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ float	vec3_dot(t_vec3 a, t_vec3 b)
 
 float	vec3_len(t_vec3 a)
 {
-	return (sqrt(vec3_dist(a, (t_vec3){0, 0, 0})));
+	return (vec3_dist(a, (t_vec3){0, 0, 0}));
 }
 
 float	vec3_dist(t_vec3 a, t_vec3 b)

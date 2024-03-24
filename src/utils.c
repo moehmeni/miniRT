@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 17:51:05 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/21 18:06:36 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/24 22:23:27 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,23 @@ void	parse_line(char *line, t_scene *scene)
 	else
 		terminate("Error\nInvalid object type found in the scene\n");
 	ft_free_split(s);
+}
+
+t_vec3	viewport_px_pos(t_canvas canvas, t_viewport v, int x, int y)
+{
+	t_vec3	point;
+
+	point.x = x * v.w / canvas.w;
+	point.y = y * v.h / canvas.h;
+	point.z = 1;
+	return (point);
+}
+
+t_viewport	viewport_dim(t_canvas canvas, t_camera camera)
+{
+	t_viewport	v;
+
+	v.w = 2 * tan(camera.fov / 2);
+	v.h = v.w * (canvas.h / canvas.w);
+	return (v);
 }
