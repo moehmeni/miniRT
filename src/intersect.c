@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/21 20:19:29 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/22 16:00:15 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,6 @@ t_object	*ray_get_hit(t_scene *scene, t_ray *ray)
 		i++;
 	}
 	ray->t = t_min;
-	// printf("t: %f\n", ray->t);
-	// print type of object
-	// printf("type: %d\n", scene->objects[j].type);
 	if (j == -1)
 		return (NULL);
 	return (&scene->objects[j]);

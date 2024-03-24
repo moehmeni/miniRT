@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 19:25:50 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/21 20:23:49 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/24 20:07:22 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ void	render(mlx_t *mlx, t_scene scene)
 	mlx_image_t	*img;
 	t_ray		ray;
 
-	img = mlx_new_image(mlx, scene.viewport.w, scene.viewport.h);
+	img = mlx_new_image(mlx, scene.canvas.w, scene.canvas.h);
 	i = 0;
-	while (i < scene.viewport.w)
+	while (i < scene.canvas.w)
 	{
 		j = 0;
-		while (j < scene.viewport.h)
+		while (j < scene.canvas.h)
 		{
 			ray = (t_ray){scene.camera.pos, (t_vec3){i, j, 0}, INFINITY};
 			ray.dir = vec3_norm(vec3_op(SUB, ray.dir, scene.camera.pos));
@@ -80,7 +80,7 @@ int	main(int argc, char **argv)
 	if (fd == -1)
 		terminate("Error\nInvalid file\n");
 	scene = (t_scene){.objects = objs, .lights = lights,
-		.viewport = (t_viewport){512, 512}, .obj_count = 0, .light_count = 0};
+		.canvas = (t_canvas){512, 512}, .obj_count = 0, .light_count = 0};
 	mlx = mlx_init(scene.viewport.w, scene.viewport.h, "MiniRT", 1);
 	read_map(&scene, fd);
 	render(mlx, scene);
