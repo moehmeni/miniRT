@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 19:25:50 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/25 10:18:30 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/25 16:00:57 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ void	render(mlx_t *mlx, t_scene scene)
 		{
 			ray = (t_ray){scene.camera.pos, viewport_px_pos(scene.canvas, scene.viewport, i, j), INFINITY};
 			ray.dir = vec3_norm(vec3_op(SUB, ray.dir, scene.camera.pos));
-			// printf("(%f, %f, %f)\n", ray.dir.x, ray.dir.y, ray.dir.z);
-			mlx_put_pixel(img, i, j, ray_get_color(&scene, &ray));
+			mlx_put_pixel(img, i, j, ray_get_color(&scene, &ray, scene.lights[0]));
 			j++;
 		}
 		i++;
@@ -81,7 +80,7 @@ int	main(int argc, char **argv)
 	if (fd == -1)
 		terminate("Error\nInvalid file\n");
 	scene = (t_scene){.objects = objs, .lights = lights,
-		.canvas = (t_canvas){512, 512}, .obj_count = 0, .light_count = 0};
+		.canvas = (t_canvas){1024, 1024}, .obj_count = 0, .light_count = 0};
 	mlx = mlx_init(scene.canvas.w, scene.canvas.h, "MiniRT", 1);
 	read_map(&scene, fd);
 	render(mlx, scene);
