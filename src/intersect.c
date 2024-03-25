@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/25 10:54:42 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/25 15:17:59 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,11 @@ static int	ray_hit_plane(t_ray *ray, t_plane plane)
 	float	t;
 
 	denom = vec3_dot(plane.normal, ray->dir);
-	printf("denom: %f\n", denom);
 	if (fabs(denom) < 0.00001)
 		return (0);
-	// pritnt nvec3_dot(vec3_op(SUB, plane.pos, ray->o), plane.normal)
-	printf("dot: %f\n", vec3_dot(vec3_op(SUB, plane.pos, ray->o), plane.normal));
 	t = vec3_dot(vec3_op(SUB, plane.pos, ray->o), plane.normal) / denom;
-	printf("t: %f\n", t);
 	if (t < 0)
-	{
-		printf("no hit\n");
 		return (0);
-	}
 	ray->t = t;
 	return (1);
 }

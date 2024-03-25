@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:23:44 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/25 14:36:05 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/25 15:15:37 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ t_object				parse_cylinder(char **v);
 void					parse_line(char *line, t_scene *scene);
 
 t_object				*ray_get_hit(t_scene *scene, t_ray *ray);
-int						ray_get_color(t_scene *scene, t_ray *ray);
+int						ray_get_color(t_scene *scene, t_ray *ray, t_light light);
 
 t_viewport				viewport_dim(t_canvas canvas, t_camera camera);
 t_vec3					viewport_px_pos(t_canvas canvas, t_viewport v, int x,
