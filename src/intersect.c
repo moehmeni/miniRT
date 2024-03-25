@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersect.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/24 22:23:01 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/25 10:54:42 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	ray_hit_sphere(t_ray *ray, t_sphere sphere)
 	q = solve_quadratic(q.a, q.b, q.c);
 	if (q.delta < 0 || (q.t1 < 0 && q.t2 < 0))
 	{
-		printf("no hit\n");
+		// printf("no hit\n");
 		return (0);
 	}
 	else if (q.t1 < 0)
@@ -52,17 +52,23 @@ static int	ray_hit_sphere(t_ray *ray, t_sphere sphere)
 static int	ray_hit_plane(t_ray *ray, t_plane plane)
 {
 	float	denom;
-	float	numer;
+	float	t;
 
 	denom = vec3_dot(plane.normal, ray->dir);
-	if (fabs(denom) > 0)
+	printf("denom: %f\n", denom);
+	if (fabs(denom) < 0.00001)
+		return (0);
+	// pritnt nvec3_dot(vec3_op(SUB, plane.pos, ray->o), plane.normal)
+	printf("dot: %f\n", vec3_dot(vec3_op(SUB, plane.pos, ray->o), plane.normal));
+	t = vec3_dot(vec3_op(SUB, plane.pos, ray->o), plane.normal) / denom;
+	printf("t: %f\n", t);
+	if (t < 0)
 	{
-		numer = vec3_dot(vec3_op(SUB, plane.pos, ray->o),
-							plane.normal);
-		ray->t = numer / denom;
-		return (ray->t >= 0);
+		printf("no hit\n");
+		return (0);
 	}
-	return (0);
+	ray->t = t;
+	return (1);
 }
 
 static int	ray_hit_cyl(t_ray *ray, t_cylinder cyl)

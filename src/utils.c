@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 17:51:05 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/24 22:23:27 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/25 10:17:25 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ t_vec3	viewport_px_pos(t_canvas canvas, t_viewport v, int x, int y)
 {
 	t_vec3	point;
 
-	point.x = x * v.w / canvas.w;
-	point.y = y * v.h / canvas.h;
+	point.x = (2 * (x + 0.5) / canvas.w - 1) * v.w;
+	point.y = (1 - 2 * (y + 0.5) / canvas.h) * v.h;
 	point.z = 1;
 	return (point);
 }
