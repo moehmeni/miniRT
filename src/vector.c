@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:21:15 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/24 21:03:09 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/25 10:35:27 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@ t_vec3	vec3_op(enum e_vec3_op op, t_vec3 a, t_vec3 b)
 	else if (op == MUL)
 		return ((t_vec3){a.x * b.x, a.y * b.y, a.z * b.z});
 	else if (op == CROSS)
-		return ((t_vec3){a.y * b.z - a.z * b.y,
-							a.z * b.x - a.x * b.z,
-							a.x * b.y - a.y * b.x});
+		return ((t_vec3){a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y
+			- a.y * b.x});
 	return ((t_vec3){0, 0, 0});
 }
 
