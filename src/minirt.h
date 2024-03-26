@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:23:44 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/25 15:15:37 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/26 17:54:06 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_sphere
 	t_vec3				pos;
 	float				radius;
 	t_color				color;
+	int					id;
 }						t_sphere;
 
 typedef struct s_plane
@@ -75,6 +76,7 @@ typedef struct s_plane
 	t_vec3				pos;
 	t_vec3				normal;
 	t_color				color;
+	int					id;
 }						t_plane;
 
 typedef struct s_cylinder
@@ -84,6 +86,7 @@ typedef struct s_cylinder
 	float				radius;
 	float				height;
 	t_color				color;
+	int					id;
 }						t_cylinder;
 
 typedef struct s_object
@@ -155,15 +158,16 @@ t_vec3					vec3_norm(t_vec3 a);
 float					vec3_dot(t_vec3 a, t_vec3 b);
 float					vec3_len(t_vec3 a);
 float					vec3_dist(t_vec3 a, t_vec3 b);
+t_vec3 vec3_mul(t_vec3 a, float b);
 
 t_vec3					parse_vec3(char *str);
 t_color					parse_color(char *str);
 t_light					parse_light(char **v);
 t_camera				parse_camera(char **v);
-t_object				parse_sphere(char **v);
-t_object				parse_plane(char **v);
-t_object				parse_cylinder(char **v);
-void					parse_line(char *line, t_scene *scene);
+t_object				parse_sphere(char **v, int id);
+t_object				parse_plane(char **v, int id);
+t_object				parse_cylinder(char **v, int id);
+void					parse_line(char *line, t_scene *scene, int i);
 
 t_object				*ray_get_hit(t_scene *scene, t_ray *ray);
 int						ray_get_color(t_scene *scene, t_ray *ray, t_light light);
