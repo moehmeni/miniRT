@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:21:15 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/25 10:35:27 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/26 17:36:55 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,8 @@ float	vec3_dist(t_vec3 a, t_vec3 b)
 	y = a.y - b.y;
 	z = a.z - b.z;
 	return (sqrt(x * x + y * y + z * z));
+}
+t_vec3 vec3_mul(t_vec3 a, float b)
+{
+	return ((t_vec3){a.x * b, a.y * b, a.z * b});
 }

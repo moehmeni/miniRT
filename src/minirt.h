@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:23:44 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/25 15:15:37 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/27 13:57:49 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ typedef struct s_cylinder
 	float				radius;
 	float				height;
 	t_color				color;
+	t_vec3				cap1;
+	t_vec3				cap2;
 }						t_cylinder;
 
 typedef struct s_object
@@ -155,6 +157,7 @@ t_vec3					vec3_norm(t_vec3 a);
 float					vec3_dot(t_vec3 a, t_vec3 b);
 float					vec3_len(t_vec3 a);
 float					vec3_dist(t_vec3 a, t_vec3 b);
+t_vec3 vec3_mul(t_vec3 a, float b);
 
 t_vec3					parse_vec3(char *str);
 t_color					parse_color(char *str);

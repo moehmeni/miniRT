@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/25 15:17:59 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/27 14:30:55 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,13 @@ static int	ray_hit_sphere(t_ray *ray, t_sphere sphere)
 	q.c = vec3_dot(oc, oc) - (sphere.radius * sphere.radius);
 	q = solve_quadratic(q.a, q.b, q.c);
 	if (q.delta < 0 || (q.t1 < 0 && q.t2 < 0))
-	{
-		// printf("no hit\n");
 		return (0);
-	}
 	else if (q.t1 < 0)
 		ray->t = q.t2;
 	else if (q.t2 < 0)
 		ray->t = q.t1;
 	else
 		ray->t = fmin(q.t1, q.t2);
-	// printf("t: %f\n", ray->t);
 	return (1);
 }
 
@@ -64,29 +60,93 @@ static int	ray_hit_plane(t_ray *ray, t_plane plane)
 	return (1);
 }
 
-static int	ray_hit_cyl(t_ray *ray, t_cylinder cyl)
+float check_cap_intersection(t_ray *ray, t_vec3 cap_c, t_vec3 cap_n, float r)
+{
+	float	denom;
+	float	t;
+	t_vec3	intersection_point;
+
+	denom = vec3_dot(ray->dir, cap_n);
+	if (fabs(denom) > 1e-6)
+	{
+		t = vec3_dot(vec3_op(SUB, cap_c, ray->o), cap_n) / denom;
+		if (t < 0) 
+			return (-1);
+		intersection_point = vec3_op(ADD, ray->o, vec3_mul(ray->dir, t));
+		if (vec3_len(vec3_op(SUB, intersection_point, cap_c)) <= r)
+			return (t);
+	}
+	return (-1);
+}
+
+int ray_hit_cyl(t_ray *ray, t_cylinder cyl)
 {
 	t_quadratic	q;
 	t_vec3		oc;
+	float		t_min;
+	int			hit;
+	float		ts[2];
+	int			i;
+	t_vec3		intersection_point;
+	float		t_cap;
 
 	oc = vec3_op(SUB, ray->o, cyl.pos);
-	q.a = vec3_dot(ray->dir, ray->dir) - vec3_dot(ray->dir, cyl.normal)
-		* vec3_dot(ray->dir, cyl.normal);
+	q.a = vec3_dot(ray->dir, ray->dir) - pow(vec3_dot(ray->dir, cyl.normal), 2);
 	q.b = 2 * (vec3_dot(ray->dir, oc) - vec3_dot(ray->dir, cyl.normal)
-			* vec3_dot(oc, cyl.normal));
-	q.c = vec3_dot(oc, oc) - vec3_dot(oc, cyl.normal) * vec3_dot(oc, cyl.normal)
-		- cyl.radius * cyl.radius;
+		* vec3_dot(oc, cyl.normal));
+	q.c = vec3_dot(oc, oc) - pow(vec3_dot(oc, cyl.normal), 2) 
+		- pow(cyl.radius, 2);
 	q = solve_quadratic(q.a, q.b, q.c);
-	if (q.delta < 0 || (q.t1 < 0 && q.t2 < 0))
+	if (q.delta < 0)
 		return (0);
-	else if (q.t1 < 0)
-		ray->t = q.t2;
-	else if (q.t2 < 0)
-		ray->t = q.t1;
-	else
-		ray->t = fmin(q.t1, q.t2);
-	return (1);
+
+	t_min = INFINITY;
+	hit = 0;
+
+	ts[0] = q.t1;
+	ts[1] = q.t2;
+	i = 0;
+	while (i < 2) 
+	{
+		if (ts[i] > 0)
+		{
+			intersection_point = vec3_op(ADD, ray->o,
+					vec3_mul(ray->dir, ts[i]));
+			if (vec3_dot(vec3_op(SUB, intersection_point, cyl.cap1), cyl.normal) *
+				vec3_dot(vec3_op(SUB, intersection_point, cyl.cap2), cyl.normal) <= 0)
+			{
+				if (ts[i] < t_min)
+				{
+					t_min = ts[i];
+					hit = 1;
+				}
+			}
+		}
+		i++;
+	}
+
+	t_cap = check_cap_intersection(ray, cyl.cap1, cyl.normal, cyl.radius);
+	if (t_cap >= 0 && t_cap < t_min)
+	{
+		t_min = t_cap;
+		hit = 1;
+	}
+
+	t_cap = check_cap_intersection(ray, cyl.cap2, cyl.normal, cyl.radius);
+	if (t_cap >= 0 && t_cap < t_min)
+	{
+		t_min = t_cap;
+		hit = 1;
+	}
+
+	if (hit)
+	{
+		ray->t = t_min;
+		return (1);
+	}
+	return (0);
 }
+
 
 t_object	*ray_get_hit(t_scene *scene, t_ray *ray)
 {
