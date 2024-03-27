@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 19:25:50 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/26 17:54:21 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/27 13:56:32 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,13 @@ void	terminate(char *msg)
 void	read_map(t_scene *scene, int fd)
 {
 	char	*line;
-	int		i;
 
-	i = 0;
 	while (1)
 	{
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		parse_line(line, scene, i++);
+		parse_line(line, scene);
 		free(line);
 	}
 }
