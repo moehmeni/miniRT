@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:23:44 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/27 13:57:49 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/28 16:30:25 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ typedef struct s_object
 	t_plane				plane;
 	t_cylinder			cylinder;
 	enum e_object_type	type;
+	int					id;
 }						t_object;
 
 /* ----------------------------*/ /*scene*/
