@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:21:15 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/26 17:36:55 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/28 21:25:53 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,10 @@ float	vec3_dot(t_vec3 a, t_vec3 b)
 
 float	vec3_len(t_vec3 a)
 {
-	return (vec3_dist(a, (t_vec3){0, 0, 0}));
+	return (sqrt(a.x * a.x + a.y * a.y + a.z * a.z));
 }
 
-float	vec3_dist(t_vec3 a, t_vec3 b)
-{
-	float	x;
-	float	y;
-	float	z;
-
-	x = a.x - b.x;
-	y = a.y - b.y;
-	z = a.z - b.z;
-	return (sqrt(x * x + y * y + z * z));
-}
-t_vec3 vec3_mul(t_vec3 a, float b)
+t_vec3	vec3_mul(t_vec3 a, float b)
 {
 	return ((t_vec3){a.x * b, a.y * b, a.z * b});
 }

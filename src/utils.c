@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 17:51:05 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/27 13:56:45 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/28 21:55:00 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ void	parse_line(char *line, t_scene *scene)
 	else if (!ft_strcmp(s[0], "cy"))
 		scene->objects[scene->obj_count++] = parse_cylinder(s);
 	else
-		terminate("Error\nInvalid object type found in the scene\n");
+	{
+		ft_putstr_fd("Error\nInvalid object type found in the scene\n", 2);
+		exit(1);
+	}
 	ft_free_split(s);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:23:44 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/28 16:30:25 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/28 22:52:23 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,14 +151,12 @@ typedef struct s_scene
 }						t_scene;
 
 /* ----------------------------*/ /*functions*/
-void					terminate(char *msg);
 
 t_vec3					vec3_op(enum e_vec3_op op, t_vec3 a, t_vec3 b);
 t_vec3					vec3_norm(t_vec3 a);
 float					vec3_dot(t_vec3 a, t_vec3 b);
 float					vec3_len(t_vec3 a);
-float					vec3_dist(t_vec3 a, t_vec3 b);
-t_vec3 vec3_mul(t_vec3 a, float b);
+t_vec3					vec3_mul(t_vec3 a, float b);
 
 t_vec3					parse_vec3(char *str);
 t_color					parse_color(char *str);
@@ -170,10 +168,15 @@ t_object				parse_cylinder(char **v);
 void					parse_line(char *line, t_scene *scene);
 
 t_object				*ray_get_hit(t_scene *scene, t_ray *ray);
-int						ray_get_color(t_scene *scene, t_ray *ray, t_light light);
+int						ray_get_color(t_scene *scene, t_ray *ray);
+int						ray_hit_cyl(t_ray *ray, t_cylinder cyl);
 
 t_viewport				viewport_dim(t_canvas canvas, t_camera camera);
 t_vec3					viewport_px_pos(t_canvas canvas, t_viewport v, int x,
 							int y);
+
+float					cylinder_shading(t_scene *scene, t_ray *ray,
+							t_cylinder cylinder);
+t_quadratic				solve_quadratic(float a, float b, float c);
 
 #endif
