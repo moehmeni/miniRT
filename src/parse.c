@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 17:49:53 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/27 14:09:12 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/28 12:30:29 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_camera	parse_camera(char **v)
 	t_camera	camera;
 
 	camera.pos = parse_vec3(v[1]);
-	camera.normal = parse_vec3(v[2]);
+	camera.normal = vec3_norm(parse_vec3(v[2]));
 	camera.fov = ft_atof(v[3]);
 	return (camera);
 }
