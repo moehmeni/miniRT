@@ -6,19 +6,11 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:28:43 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/28 22:53:58 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/28 22:57:53 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./minirt.h"
-
-static t_color	color_scale(t_color color, float scale)
-{
-	t_color	scaled_color;
-
-	scaled_color = (t_color){color.r * scale, color.g * scale, color.b * scale};
-	return (scaled_color);
-}
 
 static float	sphere_shading(t_scene *scene, t_ray *ray, t_sphere sphere)
 {

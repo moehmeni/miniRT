@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 15:15:08 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/28 20:02:15 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/28 22:58:07 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@ t_quadratic	solve_quadratic(float a, float b, float c)
 	q.t1 = (-b + sqrt(q.delta)) / (2 * a);
 	q.t2 = (-b - sqrt(q.delta)) / (2 * a);
 	return (q);
+}
+
+t_color	color_scale(t_color color, float scale)
+{
+	t_color	scaled_color;
+
+	scaled_color = (t_color){color.r * scale, color.g * scale, color.b * scale};
+	return (scaled_color);
 }
 
 static int	ray_hit_sphere(t_ray *ray, t_sphere sphere)

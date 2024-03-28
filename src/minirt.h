@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:23:44 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/28 22:52:23 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/28 22:58:22 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ t_object				parse_plane(char **v);
 t_object				parse_cylinder(char **v);
 void					parse_line(char *line, t_scene *scene);
 
+t_color					color_scale(t_color color, float scale);
 t_object				*ray_get_hit(t_scene *scene, t_ray *ray);
 int						ray_get_color(t_scene *scene, t_ray *ray);
 int						ray_hit_cyl(t_ray *ray, t_cylinder cyl);

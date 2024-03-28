@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/28 18:20:17 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/28 22:53:43 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/28 22:55:38 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,8 @@ int	ray_hit_cyl(t_ray *ray, t_cylinder cyl)
 	{
 		p = vec3_op(ADD, ray->o, vec3_mul(ray->dir, ts[i]));
 		if (vec3_dot(vec3_op(SUB, p, cyl.cap1),
-						cyl.normal) *
-					vec3_dot(vec3_op(SUB, p, cyl.cap2),
-								cyl.normal) <=
-				0 &&
-			ts[i] < t_min)
+				cyl.normal) * vec3_dot(vec3_op(SUB, p, cyl.cap2),
+				cyl.normal) <= 0 && ts[i] < t_min)
 			t_min = ts[i];
 		i++;
 	}
