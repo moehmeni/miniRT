@@ -6,7 +6,7 @@
 /*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:28:43 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/28 13:34:30 by htaheri          ###   ########.fr       */
+/*   Updated: 2024/03/28 16:46:58 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,27 +57,32 @@ double	plane_shading(t_ray ray, t_plane plane, t_light light)
 	light_dir = vec3_norm(vec3_op(SUB, light.pos, rayhit1));
 	light_rate = vec3_dot(normal, light_dir);
 	if (light_rate < 0)
-		light_rate = 0;
+		light_rate = 0.8;
 	return (light_rate);
 }
 
-double cylinder_shading(t_ray ray, t_cylinder cylinder, t_light light) 
+double	cylinder_shading(t_ray ray, t_cylinder cylinder, t_light light)
 {
-	t_vec3 light_dir;
-	double light_rate;
-	t_vec3 rayhit1 = ray_at(ray, ray.t);
+	t_vec3	rayhit1;
+	t_vec3	base_to_hit;
+	float	projection_length;
+	t_vec3	projected_point_on_axis;
+	t_vec3	normal;
+	t_vec3	light_dir;
+	double	light_rate;
 
-	t_vec3 cap1 = vec3_op(SUB, cylinder.pos, vec3_mul(cylinder.normal, cylinder.height / 2));
-	t_vec3 hit_to_center = vec3_op(SUB, cap1, rayhit1);
-	float projection_length = vec3_dot(hit_to_center, cylinder.normal);
-	t_vec3 projection_on_axis = vec3_op(ADD, rayhit1, vec3_mul(cylinder.normal, projection_length));
-	t_vec3 normal = vec3_norm(vec3_op(SUB, rayhit1, projection_on_axis));
+	rayhit1 = ray_at(ray, ray.t);
+	base_to_hit = vec3_op(SUB, rayhit1, cylinder.cap1);
+	projection_length = vec3_dot(base_to_hit, cylinder.normal);
+	projected_point_on_axis = vec3_op(ADD, cylinder.cap1,
+			vec3_mul(cylinder.normal, projection_length));
+	normal = vec3_norm(vec3_op(SUB, rayhit1, projected_point_on_axis));
 	light_dir = vec3_norm(vec3_op(SUB, light.pos, rayhit1));
 	light_rate = vec3_dot(normal, light_dir);
-	if (light_rate < 0) light_rate = 0;
-	return light_rate;
+	if (light_rate < 0)
+		light_rate = 0;
+	return (light_rate);
 }
-
 
 int	ray_get_color(t_scene *scene, t_ray *ray, t_light light)
 {
@@ -87,6 +92,7 @@ int	ray_get_color(t_scene *scene, t_ray *ray, t_light light)
 	t_color		color;
 	t_ray		shadow_ray;
 	t_vec3		normal;
+	double		shadow_intensity;
 
 	color = (t_color){0, 0, 0};
 	hit1 = ray_get_hit(scene, ray);
@@ -109,16 +115,24 @@ int	ray_get_color(t_scene *scene, t_ray *ray, t_light light)
 	else if (hit1->type == CYLINDER)
 	{
 		color = hit1->cylinder.color;
-		normal = vec3_norm(vec3_op(SUB, rayhit1, hit1->cylinder.pos));
+		normal = vec3_norm(vec3_op(SUB, rayhit1, hit1->cylinder.cap1));
 		color = color_scale(color, cylinder_shading(*ray, hit1->cylinder, light));
+
+
 	}
+
 	shadow_ray.o = vec3_op(ADD, rayhit1, vec3_mul(normal, 0.005));
 	shadow_ray.dir = vec3_norm(vec3_op(SUB, light.pos, rayhit1));
 	shadow_ray.t = INFINITY;
 	hit2 = ray_get_hit(scene, &shadow_ray);
-	double shadow_intensity = 1;
+	if (hit2 && hit2->id == hit1->id)
+		return (color.r << 24 | color.g << 16 | color.b << 8 | 0xFF);
+	shadow_intensity = 1;
 	if (hit2)
-		shadow_intensity = 0.4;
+	{
+		shadow_intensity = shadow_ray.t / vec3_len(vec3_op(SUB, light.pos, ray_at(shadow_ray, shadow_ray.t)));
+		shadow_intensity = fmin(0.999, shadow_intensity);
+	}
 	color = color_scale(color, shadow_intensity);
 	return (color.r << 24 | color.g << 16 | color.b << 8 | 0xFF);
 }
