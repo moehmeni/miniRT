@@ -6,7 +6,7 @@
 #    By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/18 17:01:34 by mmomeni           #+#    #+#              #
-#    Updated: 2024/03/28 20:01:31 by mmomeni          ###   ########.fr        #
+#    Updated: 2024/03/29 17:58:52 by mmomeni          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,6 @@ debug: CFLAGS += -fsanitize=address -g
 debug: all bonus
 
 norm:
-	norminette $(SRCS)
+	norminette $(SRCS) $(LIBFT_DIR)
 
 .PHONY: all clean fclean re bonus brew mlx
