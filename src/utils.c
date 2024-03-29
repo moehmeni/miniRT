@@ -6,7 +6,7 @@
 /*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 17:51:05 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/28 21:55:00 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/29 17:56:31 by mmomeni          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ t_vec3	parse_vec3(char *str)
 	t_vec3	vec;
 
 	vec_heap = ft_split(str, ',');
+	if (!vec_heap || ft_split_len(vec_heap) != 3)
+	{
+		ft_putstr_fd("Error\nInvalid vector format\n", 2);
+		exit(1);
+	}
 	vec.x = ft_atof(vec_heap[0]);
 	vec.y = ft_atof(vec_heap[1]);
 	vec.z = ft_atof(vec_heap[2]);
