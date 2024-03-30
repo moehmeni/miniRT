@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shading.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 15:28:43 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/28 22:57:53 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/30 13:48:30 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int	shadow_shading(t_scene *scene, t_vec3 *hit1, t_vec3 normal,
 						vec3_mul(shadow_ray.dir, shadow_ray.t))));
 		shadow_intensity = fmin(0.999, shadow_intensity);
 	}
-	color = color_scale(color, shadow_intensity);
+	color = color_scale(color, shadow_intensity * scene->ambient.ratio);
 	return (color.r << 24 | color.g << 16 | color.b << 8 | 0xFF);
 }
 
@@ -84,6 +84,7 @@ static t_color	calculate_hit_color(t_scene *scene, t_ray *ray, t_object *hit1)
 		color = color_scale(color, cylinder_shading(scene, ray,
 					hit1->cylinder));
 	}
+	color = color_scale(color, scene->lights[0].ratio);
 	return (color);
 }
 
