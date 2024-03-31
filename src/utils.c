@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 17:51:05 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/29 17:56:31 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/30 13:50:00 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	parse_line(char *line, t_scene *scene)
 
 	s = ft_split(line, ' ');
 	if (!ft_strcmp(s[0], "A"))
-		scene->amblight = (t_amblight){ft_atof(s[1]), parse_color(s[2])};
+		scene->ambient = (t_ambient){fmin(1, ft_atof(s[1])), parse_color(s[2])};
 	else if (!ft_strcmp(s[0], "C"))
 		scene->camera = parse_camera(s);
 	else if (!ft_strcmp(s[0], "L"))

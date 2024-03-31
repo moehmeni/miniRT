@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 18:23:44 by htaheri           #+#    #+#             */
-/*   Updated: 2024/03/28 22:58:22 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/30 13:48:30 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,11 @@ typedef struct s_camera
 	float				fov;
 }						t_camera;
 
-typedef struct s_amblight
+typedef struct s_ambient
 {
 	float				ratio;
 	t_color				color;
-}						t_amblight;
+}						t_ambient;
 
 typedef struct s_light
 {
@@ -141,7 +141,7 @@ typedef struct s_ray
 typedef struct s_scene
 {
 	t_camera			camera;
-	t_amblight			amblight;
+	t_ambient			ambient;
 	t_viewport			viewport;
 	t_canvas			canvas;
 	t_light				*lights;

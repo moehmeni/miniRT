@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmomeni <mmomeni@student.42.fr>            +#+  +:+       +#+        */
+/*   By: htaheri <htaheri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 17:49:53 by mmomeni           #+#    #+#             */
-/*   Updated: 2024/03/28 20:04:57 by mmomeni          ###   ########.fr       */
+/*   Updated: 2024/03/30 13:50:11 by htaheri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_light	parse_light(char **v)
 	t_light	light;
 
 	light.pos = parse_vec3(v[1]);
-	light.ratio = ft_atof(v[2]);
+	light.ratio = fmin(ft_atof(v[2]), 1);
 	light.color = parse_color(v[3]);
 	return (light);
 }
